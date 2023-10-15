@@ -54,5 +54,4 @@ class AccountService {
             accountRepository.delete(it)
         }.orElseThrow{ throw RuntimeException("Id not found $id") }
     }
-
 }

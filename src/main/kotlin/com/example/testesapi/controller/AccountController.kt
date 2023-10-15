@@ -54,4 +54,3 @@ class AccountController {
         return ResponseEntity<Void>(HttpStatus.OK)
     }
 }
-
