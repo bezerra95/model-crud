@@ -2,6 +2,7 @@ package com.example.testesapi.controller
 
 import com.example.testesapi.model.Account
 import com.example.testesapi.request.AccountRequest
+import com.example.testesapi.request.toResponde
 import com.example.testesapi.response.AccountResponse
 import com.example.testesapi.service.AccountService
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,39 +19,37 @@ class AccountController {
 
     @PostMapping
     fun createAccount(@RequestBody accountRequest: AccountRequest): ResponseEntity<AccountResponse> {
-        val createdAccount = accountService.createAccount(accountRequest)
+        val account = accountService.createAccount(accountRequest)
 
-        val accountResponse = AccountResponse(
-            createdAccount.id,
-            createdAccount.name,
-            createdAccount.document,
-            createdAccount.phone
-        )
-        return ResponseEntity.status(HttpStatus.CREATED).body(accountResponse)
+        return ResponseEntity.ok(account.toResponde())
     }
 
     @GetMapping
     fun getAll(): List<Account> = accountService.getAll()
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): ResponseEntity<Account> =
-        accountService.getById(id).map {
-            ResponseEntity.ok(it)
-        }.orElse(ResponseEntity.notFound().build())
+    fun getById(@PathVariable id: Long): ResponseEntity<AccountResponse> {
+        val account = accountService.getById(id) ?: return ResponseEntity.notFound().build()
 
-    @PutMapping("/{id}")
-    fun updateAccount(@PathVariable id: Long, @RequestBody accountRequest: AccountRequest): ResponseEntity<Account> {
-        val updatedAccount = accountService.updateAccount(id, accountRequest)
-        return if (updatedAccount != null) {
-            ResponseEntity.ok(updatedAccount)
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(account.toResponde())
     }
 
+    @PutMapping("/{id}")
+    fun updateAccount(@PathVariable id: Long, @RequestBody accountRequest: AccountRequest): ResponseEntity<AccountResponse> {
+        accountService.getById(id) ?: return ResponseEntity.notFound().build()
+
+        val account = accountService.updateAccount(id, accountRequest)
+
+        return ResponseEntity.ok(account.toResponde())
+    }
+
+
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
-        accountService.delete(id)
-        return ResponseEntity<Void>(HttpStatus.OK)
+    fun delete(@PathVariable id: Long): ResponseEntity<AccountResponse> {
+        val account = accountService.getById(id) ?: return ResponseEntity.notFound().build()
+
+        accountService.delete(account.id!!)
+
+        return ResponseEntity.ok(account.toResponde())
     }
 }

@@ -15,29 +15,22 @@ class AccountService {
     @Autowired
     private lateinit var accountRepository: AccountRepository
 
-    fun createAccount(accountRequest: AccountRequest): AccountResponse {
+    fun createAccount(accountRequest: AccountRequest): Account {
         val account = Account(
             name = accountRequest.name,
             document = accountRequest.document,
             phone = accountRequest.phone
         )
 
-        val createdAccount = accountRepository.save(account)
-
-        return AccountResponse(
-            createdAccount.id,
-            createdAccount.name,
-            createdAccount.document,
-            createdAccount.phone
-        )
+        return accountRepository.save(account)
     }
 
     fun getAll(): List<Account> {
         return accountRepository.findAll()
     }
 
-    fun getById(id: Long): Optional<Account> {
-        return accountRepository.findById(id)
+    fun getById(id: Long): Account? {
+        return accountRepository.getReferenceById(id)
     }
 
     fun updateAccount(id: Long, accountRequest: AccountRequest): Account {
