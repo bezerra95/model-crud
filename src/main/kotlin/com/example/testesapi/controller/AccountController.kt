@@ -43,7 +43,6 @@ class AccountController {
         return ResponseEntity.ok(account.toResponde())
     }
 
-
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long): ResponseEntity<AccountResponse> {
         val account = accountService.getById(id) ?: return ResponseEntity.notFound().build()
