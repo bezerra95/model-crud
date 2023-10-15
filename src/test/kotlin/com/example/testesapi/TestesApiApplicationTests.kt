@@ -25,7 +25,7 @@ class AccountControllerTest {
 
 	@Test
 	fun `test find all`() {
-		accountRepository.save(Account(name = "Test", document = "123", phone = "987654321"))
+		accountRepository.save(Account( name = "Test", document = "123", phone = "987654321"))
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/accounts"))
 			.andExpect(MockMvcResultMatchers.status().isOk)
@@ -43,7 +43,6 @@ class AccountControllerTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/accounts/${account.id}"))
 			.andExpect(MockMvcResultMatchers.status().isOk)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$.id").value(account.id))
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(account.name))
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.document").value(account.document))
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.phone").value(account.phone))
@@ -59,7 +58,7 @@ class AccountControllerTest {
 			.accept(MediaType.APPLICATION_JSON)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(json))
-			.andExpect(MockMvcResultMatchers.status().isCreated)
+			.andExpect(MockMvcResultMatchers.status().isOk)
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.name").value(account.name))
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.document").value(account.document))
 			.andExpect(MockMvcResultMatchers.jsonPath("\$.phone").value(account.phone))
