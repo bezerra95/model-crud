@@ -13,7 +13,7 @@ import java.util.*
 class AccountService {
 
     @Autowired
-    private lateinit var accountRepository: AccountRepository
+    private lateinit var accountGateway: AccountGateway
 
     fun createAccount(accountRequest: AccountRequest): Account {
         val account = Account(
@@ -22,19 +22,19 @@ class AccountService {
             phone = accountRequest.phone
         )
 
-        return accountRepository.save(account)
+        return accountGateway.save(account)
     }
 
     fun getAll(): List<Account> {
-        return accountRepository.findAll()
+        return accountGateway.getAll()
     }
 
     fun getById(id: Long): Account? {
-        return accountRepository.getReferenceById(id)
+        return accountGateway.getById(id)
     }
 
     fun updateAccount(id: Long, accountRequest: AccountRequest): Account {
-        return accountRepository.save(Account(
+        return accountGateway.save(Account(
             id = id,
             name = accountRequest.name,
             phone = accountRequest.phone,
@@ -43,8 +43,6 @@ class AccountService {
     }
 
     fun delete(id: Long) {
-        accountRepository.findById(id).map {
-            accountRepository.delete(it)
-        }.orElseThrow{ throw RuntimeException("Id not found $id") }
+        return accountGateway.delete(id)
     }
 }

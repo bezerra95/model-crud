@@ -99,5 +99,4 @@ class AccountControllerTest {
 		val findById = accountRepository.findById(account.id!!)
 		Assertions.assertFalse(findById.isPresent)
 	}
-
 }
