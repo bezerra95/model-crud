@@ -9,7 +9,7 @@ data class AccountRequest(
     val phone: String
 )
 
-fun Account.toResponde(): AccountResponse {
+fun Account.toResponse(): AccountResponse {
     return AccountResponse(
         id = this.id!!,
         name = this.name,
