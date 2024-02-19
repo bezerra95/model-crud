@@ -1,7 +1,7 @@
 package com.example.testesapi.controller
 
 import com.example.testesapi.request.AccountRequest
-import com.example.testesapi.request.toResponde
+import com.example.testesapi.request.toResponse
 import com.example.testesapi.response.AccountResponse
 import com.example.testesapi.service.AccountService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,14 +20,14 @@ class AccountController {
     fun createAccount(@RequestBody accountRequest: AccountRequest): ResponseEntity<AccountResponse> {
         val account = accountService.createAccount(accountRequest)
 
-        return ResponseEntity.ok(account.toResponde())
+        return ResponseEntity.ok(account.toResponse())
     }
 
     @GetMapping
     fun getAll(): ResponseEntity<List<AccountResponse>> {
         val response = accountService.getAll()
 
-        return ResponseEntity.ok(response.map { it.toResponde() })
+        return ResponseEntity.ok(response.map { it.toResponse() })
     }
 
     @GetMapping("/page")
@@ -44,7 +44,7 @@ class AccountController {
 
         val accounts = PageImpl(pagedResponses, pageable, response.size.toLong())
 
-        return ResponseEntity.ok(accounts.map { account -> account.toResponde() })
+        return ResponseEntity.ok(accounts.map { account -> account.toResponse() })
     }
 
     @GetMapping("/sort")
@@ -64,14 +64,14 @@ class AccountController {
         }
         val response = accountService.getAllSort(sort)
 
-        return ResponseEntity.ok(response.map { it.toResponde() })
+        return ResponseEntity.ok(response.map { it.toResponse() })
     }
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long): ResponseEntity<AccountResponse> {
         val account = accountService.getById(id) ?: return ResponseEntity.notFound().build()
 
-        return ResponseEntity.ok(account.toResponde())
+        return ResponseEntity.ok(account.toResponse())
     }
 
     @PutMapping("/{id}")
@@ -80,7 +80,7 @@ class AccountController {
 
         val account = accountService.updateAccount(id, accountRequest)
 
-        return ResponseEntity.ok(account.toResponde())
+        return ResponseEntity.ok(account.toResponse())
     }
 
     @DeleteMapping("/{id}")
@@ -89,6 +89,6 @@ class AccountController {
 
         accountService.delete(account.id!!)
 
-        return ResponseEntity.ok(account.toResponde())
+        return ResponseEntity.ok(account.toResponse())
     }
 }
