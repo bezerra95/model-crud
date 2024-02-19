@@ -1,14 +1,19 @@
 package com.example.testesapi.model
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import com.example.testesapi.enum.EntityStatus
+import javax.persistence.*
 
 @Entity(name = "accounts")
 data class Account (
     @Id @GeneratedValue
     var id: Long? = null,
+
     val name: String,
+
     val document: String,
-    val phone: String
+
+    val phone: String,
+
+    @Enumerated(EnumType.STRING)
+    var status: EntityStatus
 )

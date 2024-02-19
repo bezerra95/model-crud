@@ -1,9 +1,7 @@
 package com.example.testesapi.service
 
 import com.example.testesapi.model.Account
-import com.example.testesapi.request.AccountRequest
 import org.springframework.data.domain.Sort
-import java.util.*
 
 interface AccountGateway {
     fun getAll(): List<Account>

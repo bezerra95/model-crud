@@ -1,14 +1,11 @@
 package com.example.testesapi.service
 
+import com.example.testesapi.enum.EntityStatus
 import com.example.testesapi.model.Account
-import com.example.testesapi.repository.AccountRepository
 import com.example.testesapi.request.AccountRequest
-import com.example.testesapi.response.AccountResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
-import java.util.*
 
 @Service
 class AccountService {
@@ -20,13 +17,14 @@ class AccountService {
         val account = Account(
             name = accountRequest.name,
             document = accountRequest.document,
-            phone = accountRequest.phone
+            phone = accountRequest.phone,
+            status = EntityStatus.ACTIVE
         )
         return accountGateway.save(account)
     }
 
     fun getAll(): List<Account> {
-        return accountGateway.getAll()
+        return accountGateway.getAll().filter { it.status == EntityStatus.ACTIVE }
     }
 
     fun getById(id: Long): Account? {
@@ -39,7 +37,8 @@ class AccountService {
             id = id,
             name = accountRequest.name,
             phone = accountRequest.phone,
-            document = accountRequest.document
+            document = accountRequest.document,
+            status = EntityStatus.ACTIVE
             )
         )
     }

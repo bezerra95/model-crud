@@ -75,7 +75,10 @@ class AccountController {
     }
 
     @PutMapping("/{id}")
-    fun updateAccount(@PathVariable id: Long, @RequestBody accountRequest: AccountRequest): ResponseEntity<AccountResponse> {
+    fun updateAccount(
+        @PathVariable id: Long,
+        @RequestBody accountRequest: AccountRequest
+    ): ResponseEntity<AccountResponse> {
         accountService.getById(id) ?: return ResponseEntity.notFound().build()
 
         val account = accountService.updateAccount(id, accountRequest)
