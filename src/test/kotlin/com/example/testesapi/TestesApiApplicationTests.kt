@@ -23,19 +23,35 @@ class AccountControllerTest {
 
 	@Autowired lateinit var accountRepository: AccountRepository
 
+
+	//	@Test
+	//	fun `test find all`() {
+	//		accountRepository.save(Account( name = "Test", document = "123", phone = "987654321"))
+	//
+	//		mockMvc.perform(MockMvcRequestBuilders.get("/accounts"))
+	//			.andExpect(MockMvcResultMatchers.status().isOk)
+	//			.andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
+	//			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].id").isNumber)
+	//			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
+	//			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].document").isString)
+	//			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].phone").isString)
+	//			.andDo(MockMvcResultHandlers.print())
+	//	}
+
 	@Test
-	fun `test find all`() {
-		accountRepository.save(Account( name = "Test", document = "123", phone = "987654321"))
+	fun `testFindAll`() {
+		accountRepository.save(Account(name = "Test", document = "123", phone = "987654321"))
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/accounts"))
 			.andExpect(MockMvcResultMatchers.status().isOk)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$").isArray)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].id").isNumber)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].name").isString)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].document").isString)
-			.andExpect(MockMvcResultMatchers.jsonPath("\$[0].phone").isString)
+			.andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray)
+			.andExpect(MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber)
+			.andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").isString)
+			.andExpect(MockMvcResultMatchers.jsonPath("$.content[0].document").isString)
+			.andExpect(MockMvcResultMatchers.jsonPath("$.content[0].phone").isString)
 			.andDo(MockMvcResultHandlers.print())
 	}
+
 
 	@Test
 	fun `test find by id`() {

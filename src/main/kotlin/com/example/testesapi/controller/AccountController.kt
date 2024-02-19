@@ -1,12 +1,11 @@
 package com.example.testesapi.controller
 
-import com.example.testesapi.model.Account
 import com.example.testesapi.request.AccountRequest
 import com.example.testesapi.request.toResponde
 import com.example.testesapi.response.AccountResponse
 import com.example.testesapi.service.AccountService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
+import org.springframework.data.domain.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -25,7 +24,48 @@ class AccountController {
     }
 
     @GetMapping
-    fun getAll(): List<Account> = accountService.getAll()
+    fun getAll(): ResponseEntity<List<AccountResponse>> {
+        val response = accountService.getAll()
+
+        return ResponseEntity.ok(response.map { it.toResponde() })
+    }
+
+    @GetMapping("/page")
+    fun getAllPage(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int
+    ): ResponseEntity<Page<AccountResponse>> {
+        val response = accountService.getAll()
+
+        val pageable: Pageable = PageRequest.of(page, size)
+        val startIndex = page * size
+        val endIndex = (startIndex + size).coerceAtMost(response.size)
+        val pagedResponses = response.subList(startIndex, endIndex)
+
+        val accounts = PageImpl(pagedResponses, pageable, response.size.toLong())
+
+        return ResponseEntity.ok(accounts.map { account -> account.toResponde() })
+    }
+
+    @GetMapping("/sort")
+    fun getAllSort(
+        @RequestParam(required = false) sortField: String?,
+        @RequestParam(defaultValue = "asc") sortDirection: String?
+    ): ResponseEntity<List<AccountResponse>> {
+
+        val sort: Sort = if (sortField != null) {
+            if (sortDirection == "desc") {
+                Sort.by(Sort.Order.desc(sortField))
+            } else {
+                Sort.by(Sort.Order.asc(sortField))
+            }
+        } else {
+            Sort.by(Sort.Order.asc("startTime"))
+        }
+        val response = accountService.getAllSort(sort)
+
+        return ResponseEntity.ok(response.map { it.toResponde() })
+    }
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long): ResponseEntity<AccountResponse> {

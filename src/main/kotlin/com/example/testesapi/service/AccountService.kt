@@ -5,6 +5,7 @@ import com.example.testesapi.repository.AccountRepository
 import com.example.testesapi.request.AccountRequest
 import com.example.testesapi.response.AccountResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.lang.RuntimeException
 import java.util.*
@@ -21,7 +22,6 @@ class AccountService {
             document = accountRequest.document,
             phone = accountRequest.phone
         )
-
         return accountGateway.save(account)
     }
 
@@ -34,15 +34,21 @@ class AccountService {
     }
 
     fun updateAccount(id: Long, accountRequest: AccountRequest): Account {
-        return accountGateway.save(Account(
+        return accountGateway.save(
+            Account(
             id = id,
             name = accountRequest.name,
             phone = accountRequest.phone,
             document = accountRequest.document
-        ))
+            )
+        )
     }
 
     fun delete(id: Long) {
         return accountGateway.delete(id)
+    }
+
+    fun getAllSort(sort: Sort): List<Account> {
+        return accountGateway.getAllSort(sort)
     }
 }
